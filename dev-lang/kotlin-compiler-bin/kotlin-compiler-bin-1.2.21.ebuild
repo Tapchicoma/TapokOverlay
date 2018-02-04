@@ -5,7 +5,7 @@ EAPI=6
 
 DESCRIPTION="The kotlin programming language compiler"
 HOMEPAGE="https://kotlinlang.org"
-SRC_URI="https://github.com/JetBrains/kotlin/releases/download/v1.2.21/kotlin-compiler-1.2.21.zip"
+SRC_URI="https://github.com/JetBrains/kotlin/releases/download/v${PV}/kotlin-compiler-${PV}.zip"
 
 LICENSE="Apache-2.0"
 SLOT="0"

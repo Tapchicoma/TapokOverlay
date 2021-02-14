@@ -1,14 +1,14 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="The kotlin programming language compiler"
 HOMEPAGE="https://kotlinlang.org"
 SRC_URI="https://github.com/JetBrains/kotlin/releases/download/v${PV}/kotlin-compiler-${PV}.zip"
 
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="1.4"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
@@ -18,6 +18,10 @@ RDEPEND="${DEPEND}
 "
 
 S="${WORKDIR}/kotlinc"
+
+src_unpack() {
+	unpack kotlin-compiler-${PV}.zip
+}
 
 src_prepare() {
 	# Remove Windows runnables

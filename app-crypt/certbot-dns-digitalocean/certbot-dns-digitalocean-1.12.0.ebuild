@@ -20,4 +20,6 @@ IUSE=""
 
 RDEPEND="
 	 =app-crypt/certbot-1.12.0-r0[${PYTHON_USEDEP}]
+	 >=dev-python/digitalocean-1.11-r0[${PYTHON_USEDEP}]
+	 dev-python/zope-interface[${PYTHON_USEDEP}]
 "

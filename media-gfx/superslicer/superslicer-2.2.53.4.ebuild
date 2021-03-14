@@ -62,9 +62,14 @@ PATCHES=(
 src_configure() {
 	use gui && setup-wxwidgets
 
-	local mycmakeargs=( -DSLIC3R_BUILD_TESTS=$(usex test)
-	-DSLIC3R_FHS=ON -DSLIC3R_GTK=3 -DSLIC3R_GUI=$(usex gui)
-	-DSLIC3R_PCH=OFF -DSLIC3R_WX_STABLE=ON )
+	CMAKE_BUILD_TYPE=Release
+	local mycmakeargs=(
+		-DSLIC3R_BUILD_TESTS=$(usex test)
+		-DSLIC3R_FHS=1
+		-DSLIC3R_GUI=$(usex gui)
+		-DSLIC3R_PCH=0
+		-DSLIC3R_WX_STABLE=1
+	)
 
 	cmake_src_configure
 }

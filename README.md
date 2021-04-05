@@ -1,6 +1,7 @@
 ## Description
 
-My custom overlay for Gentoo containing packages not present in main repository.
+My custom ebuilds repository for the [Gentoo OS](https://www.gentoo.org/) 
+containing packages that are not present in the main repository.
 
 ## How to add
 

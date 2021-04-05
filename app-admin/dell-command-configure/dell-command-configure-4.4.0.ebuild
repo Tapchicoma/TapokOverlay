@@ -7,7 +7,7 @@ inherit unpacker
 
 DESCRIPTION="Dell command line utility to configure BIOS features."
 HOMEPAGE="https://www.dell.com/support/kbdoc/en-us/000178000/dell-command-configure?lang=en"
-SRC_URI="https://dl.dell.com/FOLDER06874341M/1/command-configure_${PV}-86.ubuntu20_amd64.tar.gz"
+SRC_URI="https://dl.dell.com/FOLDER06874341M/1/command-configure_${PV}-86.ubuntu20_amd64.tar.gz -> ${P}.tar.gz"
 
 LICENSE="all-rights-reserved"
 SLOT="0"
@@ -39,16 +39,18 @@ src_prepare() {
 	unpack_deb srvadmin-hapi_9.3.0_amd64.deb
 	rm *.deb
 	rm opt/dell/dcc/*.desktop
-	echo "/opt/${PN}/lib64" > 99-${PN}.conf
+	echo "/opt/dell/dcc/" >> 99-${PN}.conf
+	echo "/opt/dell/srvadmin/lib64/" >> 99-${PN}.conf
 }
 
 src_install() {
-	into /opt/${PN}
-	dobin opt/dell/dcc/cctk
-	dosym ../../opt/${PN}/bin/cctk opt/bin/cctk
+	exeinto /opt/dell/dcc/
+	doexe opt/dell/dcc/cctk
+	dosym ../../opt/dell/dcc/cctk opt/bin/cctk
 
-	insinto /opt/${PN}/lib64/
+	insinto /opt/dell/dcc/
 	doins opt/dell/dcc/libhapiintf.so
+	insinto /opt/dell/srvadmin/lib64/
 	doins -r opt/dell/srvadmin/lib64/*.so.*
 
 	insinto /etc/ld.so.conf.d/

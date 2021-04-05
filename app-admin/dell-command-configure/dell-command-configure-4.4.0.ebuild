@@ -60,3 +60,8 @@ src_install() {
 	insinto /etc/ld.so.conf.d/
 	doins 99-${PN}.conf
 }
+
+pkg_postinst() {
+	ewarn "Please run 'env-update' and then 'source /etc/profile'"
+	ewarn "to pickup tool libraries."
+}

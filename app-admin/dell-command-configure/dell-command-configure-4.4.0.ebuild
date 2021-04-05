@@ -24,6 +24,8 @@ S="${WORKDIR}"
 QA_PREBUILT="
 	opt/dell/dcc/cctk
 	opt/dell/dcc/libhapiintf.so
+	opt/dell/srvadmin/etc/omreg.d/omreg-hapi.cfg
+	opt/dell/srvadmin/etc/srvadmin-hapi/ini/dchipm.ini
 	opt/dell/srvadmin/lib64/libdchapi.so.9.3.0
 	opt/dell/srvadmin/lib64/libdchbas.so.9.3.0
 	opt/dell/srvadmin/lib64/libdchcfl.so.9.3.0
@@ -39,7 +41,6 @@ src_prepare() {
 	unpack_deb srvadmin-hapi_9.3.0_amd64.deb
 	rm *.deb
 	rm opt/dell/dcc/*.desktop
-	echo "/opt/dell/dcc/" >> 99-${PN}.conf
 	echo "/opt/dell/srvadmin/lib64/" >> 99-${PN}.conf
 }
 
@@ -48,10 +49,13 @@ src_install() {
 	doexe opt/dell/dcc/cctk
 	dosym ../../opt/dell/dcc/cctk opt/bin/cctk
 
-	insinto /opt/dell/dcc/
-	doins opt/dell/dcc/libhapiintf.so
 	insinto /opt/dell/srvadmin/lib64/
+	doins opt/dell/dcc/libhapiintf.so
 	doins -r opt/dell/srvadmin/lib64/*.so.*
+
+	insinto /opt/dell/srvadmin/etc/
+	doins -r opt/dell/srvadmin/etc/*
+	newins opt/dell/srvadmin/etc/omreg.d/omreg-hapi.cfg omreg.cfg
 
 	insinto /etc/ld.so.conf.d/
 	doins 99-${PN}.conf

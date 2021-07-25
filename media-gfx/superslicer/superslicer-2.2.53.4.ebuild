@@ -57,6 +57,7 @@ PATCHES=(
 	"${FILESDIR}/freecad-dialog-${PV}.patch"
 	"${FILESDIR}/boost-mouse-atomic-${PV}.patch"
 	"${FILESDIR}/Support-for-HiDPI-in-OpenGL-on-Linux-GTK3-${PV}.patch"
+	"${FILESDIR}/version-suffix-${PV}.patch"
 )
 
 src_configure() {

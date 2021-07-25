@@ -8,4 +8,7 @@
 <longdescription lang="en">
   A mesh slicer to generated G-Code for fused-filament fabrication based on PrusaSlicer.
 </longdescription>
+<use>
+  <flag name="profiles">Install additional 3d printer profiles.</flag>
+</use>
 </pkgmetadata>

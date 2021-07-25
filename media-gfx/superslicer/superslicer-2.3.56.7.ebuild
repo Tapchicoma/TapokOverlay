@@ -68,11 +68,13 @@ PATCHES=(
 
 src_unpack() {
 	unpack ${P}.tar.gz
-	mv ${S}/resources/icons/SuperSlicer_192px.png ${S}/resources/icons/SuperSlicer2.3_192px.png || die "Failed to rename icons"
-	mv ${S}/resources/icons/SuperSlicer-gcodeviewer_192px.png ${S}/resources/icons/SuperSlicer2.3-gcodeviewer_192px.png || die "Failed to rename icons"
+	mv "${S}/resources/icons/SuperSlicer_192px.png ${S}/resources/icons/SuperSlicer2.3_192px.png" || die "Failed to rename icons"
+	mv "${S}/resources/icons/SuperSlicer-gcodeviewer_192px.png ${S}/resources/icons/SuperSlicer2.3-gcodeviewer_192px.png" || die "Failed to rename icons"
 
 	use profiles && unpack ${P}-profiles.zip &&
-	use profiles && ( cp -r "${WORKDIR}/slic3r-profiles-118aa919c16837eb2ff6ba97e2934fa4144ef806/"* "${S}/resources/profiles" || die "Failed to copy profiles" )
+	if use profiles ; then
+		cp -r "${WORKDIR}/slic3r-profiles-118aa919c16837eb2ff6ba97e2934fa4144ef806/"* "${S}/resources/profiles" || die "Failed to copy profiles"
+	fi
 }
 
 src_configure() {

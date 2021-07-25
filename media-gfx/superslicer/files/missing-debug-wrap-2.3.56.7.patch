@@ -1,0 +1,18 @@
+--- a/src/libslic3r/Fill/FillRectilinear.cpp
++++ b/src/libslic3r/Fill/FillRectilinear.cpp
+@@ -987,6 +987,7 @@ static void slice_region_by_vertical_lines(const FillRectilinear* filler, std::v
+
+     }
+     catch (const InfillFailedException& /* ex */) {
++#ifdef SLIC3R_DEBUG
+         // Export the buggy result into an SVG file.
+         static int iRun = 0;
+         BoundingBox bbox = get_extents(poly_with_offset.polygons_src);
+@@ -1030,5 +1031,6 @@ static void slice_region_by_vertical_lines(const FillRectilinear* filler, std::v
+                 i = j + 1;
+             }
+         }
++#endif // SLIC3R_DEBUG
+         assert(false);
+         throw;
+     }

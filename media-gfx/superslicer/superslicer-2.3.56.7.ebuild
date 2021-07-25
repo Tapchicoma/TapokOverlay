@@ -15,7 +15,7 @@ SRC_URI="https://github.com/supermerill/SuperSlicer/archive/${PV}.tar.gz -> ${P}
 S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="AGPL-3"
-SLOT="2/3"
+SLOT="23"
 KEYWORDS="~amd64"
 IUSE="gui test profiles"
 

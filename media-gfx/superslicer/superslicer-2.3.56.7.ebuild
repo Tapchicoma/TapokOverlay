@@ -68,8 +68,8 @@ PATCHES=(
 
 src_unpack() {
 	unpack ${P}.tar.gz
-	mv "${S}/resources/icons/SuperSlicer_192px.png ${S}/resources/icons/SuperSlicer2.3_192px.png" || die "Failed to rename icons"
-	mv "${S}/resources/icons/SuperSlicer-gcodeviewer_192px.png ${S}/resources/icons/SuperSlicer2.3-gcodeviewer_192px.png" || die "Failed to rename icons"
+	mv "${S}/resources/icons/SuperSlicer_192px.png" "${S}/resources/icons/SuperSlicer2.3_192px.png" || die "Failed to rename icons"
+	mv "${S}/resources/icons/SuperSlicer-gcodeviewer_192px.png" "${S}/resources/icons/SuperSlicer2.3-gcodeviewer_192px.png" || die "Failed to rename icons"
 
 	use profiles && unpack ${P}-profiles.zip &&
 	if use profiles ; then

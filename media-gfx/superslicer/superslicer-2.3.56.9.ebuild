@@ -61,7 +61,6 @@ PATCHES=(
 	"${FILESDIR}/miniz-zip-header-2.2.53.4.patch"
 	"${FILESDIR}/freecad-dialog-2.2.53.4.patch"
 	"${FILESDIR}/missing-imports-${PV}.patch"
-	"${FILESDIR}/missing-debug-wrap-${PV}.patch"
 	"${FILESDIR}/string-to-char-conversion-${PV}.patch"
 	"${FILESDIR}/version-suffix-${PV}.patch"
 )

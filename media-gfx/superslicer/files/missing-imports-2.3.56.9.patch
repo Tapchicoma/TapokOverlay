@@ -107,3 +107,12 @@
  #include <boost/algorithm/string.hpp>
  #include <boost/optional.hpp>
  #include <boost/nowide/convert.hpp>
+--- a/src/libslic3r/Optimize/Optimizer.hpp
++++ b/src/libslic3r/Optimize/Optimizer.hpp
+@@ -8,5 +8,6 @@
+ #include <functional>
+ #include <limits>
+ #include <cassert>
++#include <optional>
+
+ namespace Slic3r { namespace opt {

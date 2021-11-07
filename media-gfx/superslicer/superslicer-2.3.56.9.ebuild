@@ -30,12 +30,14 @@ RDEPEND="
 		>=dev-libs/boost-1.73.0:=[nls,threads(+)]
 		dev-libs/cereal
 		dev-libs/expat
+		dev-libs/c-blosc
 		dev-libs/gmp:=
 		>=dev-libs/miniz-2.1.0-r2
 		dev-libs/mpfr:=
 		>=media-gfx/openvdb-5.0.0
 		media-libs/ilmbase:=
 		media-libs/libpng:0=
+		media-libs/openexr:0=
 		media-libs/qhull:=
 		sci-libs/libigl
 		sci-libs/nlopt
@@ -49,7 +51,7 @@ RDEPEND="
 				virtual/glu
 				virtual/opengl
 				x11-libs/gtk+:3
-				x11-libs/wxGTK:${WX_GTK_VER}[X,opengl]
+				>=x11-libs/wxGTK-3.0.5.1:=[X,opengl]
 		)
 "
 DEPEND="${RDEPEND}
@@ -63,6 +65,7 @@ PATCHES=(
 	"${FILESDIR}/missing-imports-${PV}.patch"
 	"${FILESDIR}/string-to-char-conversion-${PV}.patch"
 	"${FILESDIR}/version-suffix-${PV}.patch"
+	"${FILESDIR}/wxwidget-canvas-set-context-2.3.56.9.patch"
 )
 
 src_unpack() {
@@ -82,11 +85,12 @@ src_configure() {
 	CMAKE_BUILD_TYPE=Release
 	local mycmakeargs=(
 		-DSLIC3R_BUILD_TESTS=$(usex test)
-		-DSLIC3R_FHS=1
+		-DSLIC3R_FHS=ON
 		-DSLIC3R_GTK=3
 		-DSLIC3R_GUI=$(usex gui)
-		-DSLIC3R_PCH=0
-		-DSLIC3R_WX_STABLE=1
+		-DSLIC3R_PCH=OFF
+		-DSLIC3R_WX_STABLE=ON
+		-Wno-dev
 	)
 
 	cmake_src_configure

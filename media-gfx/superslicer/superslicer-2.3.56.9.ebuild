@@ -72,6 +72,7 @@ src_unpack() {
 	unpack ${P}.tar.gz
 	mv "${S}/resources/icons/SuperSlicer_192px.png" "${S}/resources/icons/SuperSlicer2.3_192px.png" || die "Failed to rename icons"
 	mv "${S}/resources/icons/SuperSlicer_128px.png" "${S}/resources/icons/SuperSlicer2.3_128px.png" || die "Failed to rename icons"
+	mv "${S}/resources/icons/SuperSlicer-gcodeviewer_128px.png" "${S}/resources/icons/SuperSlicer2.3-gcodeviewer_128px.png" || die "Failed to rename icons"
 	mv "${S}/resources/icons/SuperSlicer-gcodeviewer_192px.png" "${S}/resources/icons/SuperSlicer2.3-gcodeviewer_192px.png" || die "Failed to rename icons"
 
 	use profiles && unpack ${P}-profiles.zip &&
@@ -102,7 +103,7 @@ src_install() {
 
 	if use gui; then
 		newicon -s 128 resources/icons/Slic3r_128px.png SuperSli3er_2.3.png
-		dosym /usr/bin/superslicer-2.3 /usr/bin/superslicer-2.3-gcodeviewer
+		dosym superslicer-2.3 /usr/bin/superslicer-2.3-gcodeviewer
 		make_desktop_entry superslicer "SuperSlicer 2.3" "SuperSli3er_2.3" "Graphics;3DGraphics;Engineering;" \
 			"MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;" \
 			"GenericName=3D Printing Software" \

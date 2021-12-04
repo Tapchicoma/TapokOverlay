@@ -102,6 +102,7 @@ src_install() {
 
 	if use gui; then
 		newicon -s 128 resources/icons/Slic3r_128px.png SuperSli3er_2.3.png
+		dosym /usr/bin/superslicer-2.3 /usr/bin/superslicer-2.3-gcodeviewer
 		make_desktop_entry superslicer "SuperSlicer 2.3" "SuperSli3er_2.3" "Graphics;3DGraphics;Engineering;" \
 			"MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;" \
 			"GenericName=3D Printing Software" \

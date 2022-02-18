@@ -11,7 +11,7 @@ MY_PN="SuperSlicer"
 DESCRIPTION="A mesh slicer to generated G-Code for fused-filament fabrication"
 HOMEPAGE="https://github.com/supermerill/SuperSlicer"
 SRC_URI="https://github.com/supermerill/SuperSlicer/archive/${PV}.tar.gz -> ${P}.tar.gz
-	profiles? ( https://github.com/slic3r/slic3r-profiles/archive/118aa919c16837eb2ff6ba97e2934fa4144ef806.zip -> ${P}-profiles.zip )"
+	profiles? ( https://github.com/slic3r/slic3r-profiles/archive/0b8261ae8bbd7c31d736f371323476d6aff3ef3b.zip -> ${P}-profiles.zip )"
 S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="AGPL-3"
@@ -76,9 +76,9 @@ src_unpack() {
 	mv "${S}/resources/icons/SuperSlicer-gcodeviewer_192px.png" "${S}/resources/icons/SuperSlicer2.3-gcodeviewer_192px.png" || die "Failed to rename icons"
 	cp "${S}/resources/icons/SuperSlicer.png" "${S}/resources/icons/SuperSlicer2.3_logo.png" || die "Failed to make logo icon"
 
-	use profiles && unpack ${P}-profiles.zip &&
+	use profiles && unpack ${P}-profiles.zip
 	if use profiles ; then
-		cp -r "${WORKDIR}/slic3r-profiles-118aa919c16837eb2ff6ba97e2934fa4144ef806/"* "${S}/resources/profiles" || die "Failed to copy profiles"
+		cp -r "${WORKDIR}/slic3r-profiles-0b8261ae8bbd7c31d736f371323476d6aff3ef3b/"* "${S}/resources/profiles" || die "Failed to copy profiles"
 	fi
 }
 

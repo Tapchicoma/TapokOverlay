@@ -31,7 +31,7 @@ RDEPEND="
 		dev-libs/expat
 		dev-libs/c-blosc
 		dev-libs/gmp:=
-		>=dev-libs/miniz-2.2.0-r2
+		>=dev-libs/miniz-2.2.0-r1
 		dev-libs/mpfr:=
 		>=media-gfx/openvdb-8.2:=
 		media-libs/libpng:0=

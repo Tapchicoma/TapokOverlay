@@ -5,9 +5,6 @@
     <email>egorr.berd@gmail.com</email>
     <name>Yahor Berdnikau</name>
   </maintainer>
-  <longdescription lang="en">
-    Digitalocean API library
-  </longdescription>
   <upstream>
     <remote-id type="github">koalalorenzo/python-digitalocean</remote-id>
   </upstream>

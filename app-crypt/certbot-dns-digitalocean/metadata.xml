@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<maintainer type="person">
-  <email>egorr.berd@gmail.com</email>
-  <name>Yahor Berdnikau</name>
-</maintainer>
-<longdescription lang="en">
-  Digitalocean DNS Authenticator plugin for Certbot (Let's Encrypt Client)
-</longdescription>
+  <maintainer type="person">
+    <email>egorr.berd@gmail.com</email>
+    <name>Yahor Berdnikau</name>
+  </maintainer>
 </pkgmetadata>

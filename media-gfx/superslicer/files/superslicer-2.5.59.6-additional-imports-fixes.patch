@@ -1,0 +1,48 @@
+diff --git a/src/libslic3r/Extruder.hpp b/src/libslic3r/Extruder.hpp
+index e4e16d263..629fd6e0b 100644
+--- a/src/libslic3r/Extruder.hpp
++++ b/src/libslic3r/Extruder.hpp
+@@ -3,6 +3,7 @@
+ 
+ #include "libslic3r.h"
+ #include "Point.hpp"
++#include <optional>
+ 
+ namespace Slic3r {
+ 
+diff --git a/src/slic3r/GUI/Field.cpp b/src/slic3r/GUI/Field.cpp
+index 10cae794d..c82969e20 100644
+--- a/src/slic3r/GUI/Field.cpp
++++ b/src/slic3r/GUI/Field.cpp
+@@ -20,6 +20,7 @@
+ #include <wx/tglbtn.h>
+ #endif
+ #include <wx/tokenzr.h>
++#include <boost/algorithm/string.hpp>
+ #include <boost/algorithm/string/predicate.hpp>
+ #include <boost/log/trivial.hpp>
+ #include "OG_CustomCtrl.hpp"
+diff --git a/src/slic3r/GUI/Preferences.cpp b/src/slic3r/GUI/Preferences.cpp
+index ab6039ff0..be01e890a 100644
+--- a/src/slic3r/GUI/Preferences.cpp
++++ b/src/slic3r/GUI/Preferences.cpp
+@@ -8,6 +8,7 @@
+ 
+ #include <wx/notebook.h>
+ #include <wx/scrolwin.h>
++#include <wx/display.h>
+ #include "Notebook.hpp"
+ #include "ButtonsDescription.hpp"
+ #include "OG_CustomCtrl.hpp"
+diff --git a/src/slic3r/GUI/Tab.cpp b/src/slic3r/GUI/Tab.cpp
+index a6c7b580e..1e1566f37 100644
+--- a/src/slic3r/GUI/Tab.cpp
++++ b/src/slic3r/GUI/Tab.cpp
+@@ -29,6 +29,7 @@
+ #include <wx/settings.h>
+ #include <wx/filedlg.h>
+ 
++#include <boost/algorithm/string.hpp>
+ #include <boost/algorithm/string/split.hpp>
+ #include <boost/algorithm/string/predicate.hpp>
+ #include <boost/algorithm/string/replace.hpp>

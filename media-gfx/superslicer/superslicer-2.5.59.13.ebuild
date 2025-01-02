@@ -57,13 +57,14 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-fix-opencascade.patch"
-	"${FILESDIR}/${PN}-2.5.59.8-boost-replace-load-string-file.patch"
+	"${FILESDIR}/${PN}-${PV}-boost-replace-load-string-file.patch"
 	"${FILESDIR}/${PN}-${PV}-boost.patch"
-	"${FILESDIR}/${PN}-2.5.59.8-relax-OpenCASCADE-dep.patch"
-	"${FILESDIR}/${PN}-2.5.59.8-fix-compilation-error-gnu17.patch"
-	"${FILESDIR}/${PN}-2.5.59.8-missing-includes-fix.patch"
+	"${FILESDIR}/${PN}-${PV}-relax-OpenCASCADE-dep.patch"
+	"${FILESDIR}/${PN}-${PV}-fix-compilation-error-gnu17.patch"
+	"${FILESDIR}/${PN}-${PV}-missing-includes-fix.patch"
 	"${FILESDIR}/${PN}-${PV}-fix-ambiguity.patch"
-	"${FILESDIR}/${PN}-2.5.59.8-cereal.patch"
+	"${FILESDIR}/${PN}-${PV}-cereal.patch"
+	"${FILESDIR}/${PN}-${PV}-dont-install-angelscript.patch"
 )
 
 src_unpack() {

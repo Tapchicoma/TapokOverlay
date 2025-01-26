@@ -13,12 +13,16 @@ LICENSE="MIT"
 SLOT="0"
 
 IUSE="cuda video_cards_amdgpu
-cpu_flags_x86_avx cpu_flags_x86_avx2 cpu_flags_x86_avx512
+cpu_flags_x86_avx cpu_flags_x86_avx2
+cpu_flags_x86_avx512f cpu_flags_x86_avx512vbmi cpu_flags_x86_avx512_vnni cpu_flags_x86_avx512_bf16
 "
 
 REQUIRED_USE="
 	cpu_flags_x86_avx2? ( cpu_flags_x86_avx )
-	cpu_flags_x86_avx512? ( cpu_flags_x86_avx2 )
+	cpu_flags_x86_avx512f? ( cpu_flags_x86_avx2 )
+	cpu_flags_x86_avx512vbmi? ( cpu_flags_x86_avx512f )
+	cpu_flags_x86_avx512_vnni? ( cpu_flags_x86_avx512f )
+	cpu_flags_x86_avx512_bf16? ( cpu_flags_x86_avx512f )
 "
 
 RDEPEND="
@@ -27,7 +31,7 @@ RDEPEND="
 "
 IDEPEND="${RDEPEND}"
 BDEPEND="
-	>=dev-lang/go-1.22.0
+	>=dev-lang/go-1.23.4
 	>=dev-build/cmake-3.24
 	>=sys-devel/gcc-11.4.0
 	cuda? ( dev-util/nvidia-cuda-toolkit )
@@ -37,7 +41,7 @@ BDEPEND="
 "
 
 pkg_pretend() {
-	if use video_cards_amdgpu; then
+	if use video_cards_amdgpu || use cuda; then
 		ewarn "WARNING: AMD & Nvidia support in this ebuild are experimental"
 		einfo "If you run into issues, especially compiling dev-libs/rocm-opencl-runtime"
 		einfo "you may try the docker image here https://github.com/ROCm/ROCm-docker"
@@ -58,7 +62,7 @@ src_prepare() {
 		# --hip-version gets appended to the compile flags which isn't a known flag.
 		# This causes rocm builds to fail because -Wunused-command-line-argument is turned on.
 		# Use nuclear option to fix this.
-	# Disable -Werror's from go modules.
+		# Disable -Werror's from go modules.
 		find "${S}" -name ".go" -exec sed -i "s/ -Werror / /g" {} + || die
 	fi
 }
@@ -67,7 +71,10 @@ src_compile() {
 	CUSTOM_CPU_FLAGS=""
 	use cpu_flags_x86_avx && CUSTOM_CPU_FLAGS+="avx"
 	use cpu_flags_x86_avx2 && CUSTOM_CPU_FLAGS+=",avx2"
-	use cpu_flags_x86_avx512 && CUSTOM_CPU_FLAGS+=",avx512,avx512vbmi,avx512vnni,avx512bf16"
+	use cpu_flags_x86_avx512f && CUSTOM_CPU_FLAGS+=",avx512"
+	use cpu_flags_x86_avx512vbmi && CUSTOM_CPU_FLAGS+=",avx512vbmi"
+	use cpu_flags_x86_avx512_vnni && CUSTOM_CPU_FLAGS+=",avx512vnni"
+	use cpu_flags_x86_avx512_bf16 && CUSTOM_CPU_FLAGS+=",avx512bf16"
 
 	# Build basic ollama executable with cpu features built in
 	export CUSTOM_CPU_FLAGS

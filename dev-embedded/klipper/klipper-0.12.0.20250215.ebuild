@@ -58,7 +58,6 @@ src_install() {
 	use doc && dodoc -r "${S}"/docs
 	use doc && dodoc -r "${S}"/config
 
-	python_optimize klippy/
 	python_domodule klippy/
 	doinitd "${FILESDIR}"/klipper
 }

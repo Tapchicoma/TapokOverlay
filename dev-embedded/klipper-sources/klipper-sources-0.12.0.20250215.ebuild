@@ -10,7 +10,7 @@ S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="arm64"
+KEYWORDS=" ~amd64 arm ~arm64"
 RESTRICT="test strip"
 
 src_unpack() {

@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} )
 
-inherit python-single-r1
+inherit python-r1
 
 DESCRIPTION="The Klipper service to control 3d-Printers."
 HOMEPAGE="https://www.klipper3d.org/"
@@ -19,11 +19,11 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 IUSE="doc"
 
 RDEPEND="${PYTHON_DEPS}
-	dev-python/pyserial[${PYTHON_SINGLE_USEDEP}]
-	dev-python/cffi[${PYTHON_SINGLE_USEDEP}]
-	dev-python/greenlet[${PYTHON_SINGLE_USEDEP}]
-	dev-python/jinja2[${PYTHON_SINGLE_USEDEP}]
-	dev-python/markupsafe[${PYTHON_SINGLE_USEDEP}]
+	dev-python/pyserial[${PYTHON_USEDEP}]
+	dev-python/cffi[${PYTHON_USEDEP}]
+	dev-python/greenlet[${PYTHON_USEDEP}]
+	dev-python/jinja2[${PYTHON_USEDEP}]
+	dev-python/markupsafe[${PYTHON_USEDEP}]
 "
 BDEPEND="${PYTHON_DEPS}"
 
@@ -35,6 +35,10 @@ src_unpack() {
 	rm -r "${WORKDIR}"/klipper-fec3e685c92ef263a829a73510c74245d7772c03 || die
 }
 
+pkg_setup() {
+	python_setup
+}
+
 src_prepare() {
 	default
 
@@ -43,7 +47,7 @@ src_prepare() {
 	rm -r "${S}"/src
 	rm -r "${S}"/test
 
-	python_fix_shebang --force klippy/
+	python_foreach_impl python_fix_shebang --force klippy/
 }
 
 src_compile() {

@@ -25,7 +25,6 @@ src_prepare() {
 	default
 
 	rm -r "${S}"/config
-	rm -r "${S}"/docs
 	rm -r "${S}"/klippy
 	rm -r "${S}"/scripts
 }

@@ -1,0 +1,60 @@
+# Copyright 2025 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_COMPAT=( python3_{11..13} )
+
+inherit python-single-r1
+
+DESCRIPTION="The Klipper service to control 3d-Printers."
+HOMEPAGE="https://www.klipper3d.org/"
+SRC_URI="https://github.com/Klipper3d/klipper/archive/fec3e685c92ef263a829a73510c74245d7772c03.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}"
+
+LICENSE="GPL-3"
+SLOT="0"
+KEYWORDS="arm arm64"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+IUSE="doc"
+
+RDEPEND="${PYTHON_DEPS}
+	dev-python/pyserial[${PYTHON_SINGLE_USEDEP}]
+	dev-python/cffi[${PYTHON_SINGLE_USEDEP}]
+	dev-python/greenlet[${PYTHON_SINGLE_USEDEP}]
+	dev-python/jinja2[${PYTHON_SINGLE_USEDEP}]
+	dev-python/markupsafe[${PYTHON_SINGLE_USEDEP}]
+"
+BDEPEND="${PYTHON_DEPS}"
+
+src_unpack() {
+	default
+
+	mkdir "${S}"
+	mv "${WORKDIR}"/klipper-fec3e685c92ef263a829a73510c74245d7772c03/* "${S}"/ || die
+	rm -r "${WORKDIR}"/klipper-fec3e685c92ef263a829a73510c74245d7772c03 || die
+}
+
+src_prepare() {
+	default
+
+	rm -r "${S}"/lib
+	rm -r "${S}"/scripts
+	rm -r "${S}"/src
+	rm -r "${S}"/test
+
+	python_fix_shebang --force klippy/
+}
+
+src_compile() {
+	true
+}
+
+src_install() {
+	use doc && dodoc -r "${S}"/docs
+	use doc && dodoc -r "${S}"/config
+
+	python_optimize klippy/
+	python_domodule klippy/
+	doinitd "${FILESDIR}"/klipper
+}

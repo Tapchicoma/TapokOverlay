@@ -1,0 +1,5 @@
+#!/sbin/openrc-run
+
+command="python klippy"
+command_args="${PRINTER_CONFIG} -l ${LOGFILE}"
+pidfile="/run/klipper.pid"

@@ -1,18 +1,21 @@
 #!/sbin/openrc-run
 
-LOG_PATH=/var/log/klipper/klippy.log
-
 description="Klipper service controlling connected 3D Printer"
 command="/usr/libexec/klipper/klippy/klippy.py"
 command_background=true
-command_args="${PRINTER_CONFIG} -l ${LOG_PATH}"
+command_args="${printer_config} -l ${printer_logfile}"
 command_user="klipper:klipper"
 pidfile="/run/klipper.pid"
 extra_commands="checkconfig"
 
 checkconfig() {
-    if [ -z "$PRINTER_CONFIG" ]; then
-        eerror "You must to setup 'PRINTER_CONFIG' in /etc/conf.d/klipper first!"
+    if [ -z "$printer_config" ]; then
+        eerror "You must to setup 'printer_config' in /etc/conf.d/klipper first!"
+        exit 1
+    fi;
+
+    if [ -z "$printer_logfile" ]; then
+        eerror "You must setup 'printer_logfile' in /etc/conf.d/klipper first!"
         exit 1
     fi;
 
@@ -30,7 +33,7 @@ start_pre() {
   if [ "${RC_CMD}" != "restart" ] ; then
     checkconfig || return $?
 
-    logdir="$(dirname "$LOG_PATH")"
+    logdir="$(dirname "$printer_logfile")"
     if [ ! -d "$logdir" ]; then
         mkdir "${logdir}" || eerror "Could not create logs directory ${logdir}"
         chown klipper:klipper "$logdir"

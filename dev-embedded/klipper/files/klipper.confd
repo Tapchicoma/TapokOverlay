@@ -1,2 +1,5 @@
 # Path to printer config
-PRINTER_CONFIG="/etc/klipper/printer.cfg"
+printer_config="/etc/klipper/printer.cfg"
+
+# Path to log file
+printer_logfile="/var/log/klipper/klippy.log"

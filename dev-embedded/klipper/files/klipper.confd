@@ -3,3 +3,6 @@ printer_config="/etc/klipper/printer.cfg"
 
 # Path to log file
 printer_logfile="/var/log/klipper/klippy.log"
+
+# Enable Klipper API server
+#printer_api_socket="/tmp/klippy_api"

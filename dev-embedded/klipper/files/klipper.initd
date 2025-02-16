@@ -1,9 +1,11 @@
 #!/sbin/openrc-run
 
+extra_args=$(if [ -z "$printer_api_socket" ]; then echo ""; else echo "-a $printer_api_socket"; fi)
+
 description="Klipper service controlling connected 3D Printer"
 command="/usr/libexec/klipper/klippy/klippy.py"
 command_background=true
-command_args="${printer_config} -l ${printer_logfile}"
+command_args="${printer_config} -l ${printer_logfile} $extra_args"
 command_user="klipper:klipper"
 pidfile="/run/klipper.pid"
 extra_commands="checkconfig"

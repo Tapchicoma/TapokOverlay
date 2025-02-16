@@ -48,7 +48,8 @@ src_prepare() {
 }
 
 src_compile() {
-	true
+	# Trigger building native helper
+	PYTHONPATH="$(pwd)/klippy" python -c "import chelper; chelper.get_ffi()"
 }
 
 src_install() {

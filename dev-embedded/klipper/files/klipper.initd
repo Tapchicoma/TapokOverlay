@@ -22,7 +22,7 @@ checkconfig() {
         exit 1
     fi;
 
-    checkpath -f "$PRINTER_CONFIG"
+    checkpath -f "$printer_config"
 }
 
 start_pre() {

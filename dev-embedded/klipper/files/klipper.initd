@@ -1,9 +1,11 @@
 #!/sbin/openrc-run
 
+LOG_PATH=/var/log/klipper/klippy.log
+
 description="Klipper service controlling connected 3D Printer"
 command="/usr/libexec/klipper/klippy/klippy.py"
 command_background=true
-command_args="${PRINTER_CONFIG}"
+command_args="${PRINTER_CONFIG} -l ${LOG_PATH}"
 pidfile="/run/klipper.pid"
 extra_commands="checkconfig"
 
@@ -26,6 +28,11 @@ start_pre() {
   # need to do that again.
   if [ "${RC_CMD}" != "restart" ] ; then
     checkconfig || return $?
+
+    logdir="$(dirname "$LOG_PATH")"
+    if [ ! -d "$logdir" ]; then
+        mkdir "${logdir}" || eerror "Could not create logs directory ${logdir}"
+    fi
   fi
 }
 
@@ -35,4 +42,10 @@ stop_pre() {
   if [ "${RC_CMD}" = "restart" ] ; then
       checkconfig || return $?
   fi
+}
+
+depend() {
+    need localmount
+    after udev
+    use logger
 }

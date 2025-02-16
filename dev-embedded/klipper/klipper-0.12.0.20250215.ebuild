@@ -64,4 +64,10 @@ src_install() {
 
 	newinitd "${FILESDIR}"/klipper.initd klipper
 	newconfd "${FILESDIR}"/klipper.confd klipper
+
+	mkdir /etc/klipper
+	fowners klipper:klipper /etc/klipper
+	insinto /etc/klipper
+	newins config/example.cfg /etc/klipper/printer.cfg
+	fowners klipper:klipper /etc/klipper/printer.cfg
 }

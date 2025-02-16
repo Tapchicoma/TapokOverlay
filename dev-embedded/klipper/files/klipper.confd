@@ -1,2 +1,2 @@
 # Path to printer config
-PRINTER_CONFIG=""
+PRINTER_CONFIG="/etc/klipper/printer.cfg"

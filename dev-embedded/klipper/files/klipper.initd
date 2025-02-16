@@ -1,12 +1,38 @@
 #!/sbin/openrc-run
 
+description="Klipper service controlling connected 3D Printer"
 command="/usr/libexec/klipper/klippy/klippy.py"
+command_background=true
 command_args="${PRINTER_CONFIG}"
 pidfile="/run/klipper.pid"
+extra_commands="checkconfig"
 
 checkconfig() {
     if [ -z "$PRINTER_CONFIG" ]; then
         eerror "You must to setup 'PRINTER_CONFIG' in /etc/conf.d/klipper first!"
         exit 1
     fi;
+
+    checkpath -f "$PRINTER_CONFIG"
+}
+
+start_pre() {
+  # If this isn't a restart, make sure that the user's config isn't
+  # busted before we try to start the daemon (this will produce
+  # better error messages than if we just try to start it blindly).
+  #
+  # If, on the other hand, this *is* a restart, then the stop_pre
+  # action will have ensured that the config is usable and we don't
+  # need to do that again.
+  if [ "${RC_CMD}" != "restart" ] ; then
+    checkconfig || return $?
+  fi
+}
+
+stop_pre() {
+  # If this is a restart, check to make sure the user's config
+  # isn't busted before we stop the running daemon.
+  if [ "${RC_CMD}" = "restart" ] ; then
+      checkconfig || return $?
+  fi
 }

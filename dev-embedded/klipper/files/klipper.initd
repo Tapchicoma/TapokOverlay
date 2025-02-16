@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+command="/usr/libexec/klipper/klippy/klippy.py"
+command_args="${PRINTER_CONFIG}"
+pidfile="/run/klipper.pid"
+
+checkconfig() {
+    if [ -z "$PRINTER_CONFIG" ]; then
+        eerror "You must to setup 'PRINTER_CONFIG' in /etc/conf.d/klipper first!"
+        exit 1
+    fi;
+}

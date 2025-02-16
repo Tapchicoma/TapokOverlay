@@ -42,11 +42,6 @@ pkg_setup() {
 src_prepare() {
 	default
 
-	rm -r "${S}"/lib
-	rm -r "${S}"/scripts
-	rm -r "${S}"/src
-	rm -r "${S}"/test
-
 	python_foreach_impl python_fix_shebang --force klippy/
 }
 
@@ -58,6 +53,12 @@ src_install() {
 	use doc && dodoc -r "${S}"/docs
 	use doc && dodoc -r "${S}"/config
 
-	python_domodule klippy/
-	doinitd "${FILESDIR}"/klipper
+	insinto /usr/libexec/klipper/
+	doins -r klippy/
+	fperms 0755 /usr/libexec/klipper/klippy/klippy.py
+	fperms 0755 /usr/libexec/klipper/klippy/console.py
+	fperms 0755 /usr/libexec/klipper/klippy/parsedump.py
+
+	newinitd "${FILESDIR}"/klipper.initd klipper
+	newconfd "${FILESDIR}"/klipper.confd klipper
 }

@@ -24,6 +24,8 @@ RDEPEND="${PYTHON_DEPS}
 	dev-python/greenlet[${PYTHON_USEDEP}]
 	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/markupsafe[${PYTHON_USEDEP}]
+	acct-group/klipper
+	acct-user/klipper
 "
 BDEPEND="${PYTHON_DEPS}"
 

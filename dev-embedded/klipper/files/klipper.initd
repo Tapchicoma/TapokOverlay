@@ -6,6 +6,7 @@ description="Klipper service controlling connected 3D Printer"
 command="/usr/libexec/klipper/klippy/klippy.py"
 command_background=true
 command_args="${PRINTER_CONFIG} -l ${LOG_PATH}"
+command_user="klipper:klipper"
 pidfile="/run/klipper.pid"
 extra_commands="checkconfig"
 

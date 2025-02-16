@@ -7,6 +7,6 @@ inherit acct-user
 
 DESCRIPTION="User to run Klipper software"
 ACCT_USER_ID=-1
-ACCT_USER_GROUPS=( klipper uucp usb )
+ACCT_USER_GROUPS=( klipper uucp usb dialout )
 
 acct-user_add_deps

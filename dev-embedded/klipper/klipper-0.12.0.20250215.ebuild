@@ -68,6 +68,6 @@ src_install() {
 	dodir /etc/klipper
 	fowners klipper:klipper /etc/klipper
 	insinto /etc/klipper
-	newins config/example.cfg /etc/klipper/printer.cfg
+	newins config/example.cfg printer.cfg
 	fowners klipper:klipper /etc/klipper/printer.cfg
 }

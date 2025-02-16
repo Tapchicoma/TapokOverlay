@@ -33,6 +33,7 @@ start_pre() {
     logdir="$(dirname "$LOG_PATH")"
     if [ ! -d "$logdir" ]; then
         mkdir "${logdir}" || eerror "Could not create logs directory ${logdir}"
+        chown klipper:klipper "$logdir"
     fi
   fi
 }

@@ -60,6 +60,7 @@ src_install() {
 	fperms 0755 /usr/libexec/klipper/klippy/klippy.py
 	fperms 0755 /usr/libexec/klipper/klippy/console.py
 	fperms 0755 /usr/libexec/klipper/klippy/parsedump.py
+	fowners klipper:klipper /usr/libexec/klipper/
 
 	newinitd "${FILESDIR}"/klipper.initd klipper
 	newconfd "${FILESDIR}"/klipper.confd klipper

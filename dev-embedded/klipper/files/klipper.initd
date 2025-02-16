@@ -7,6 +7,7 @@ command_args="${printer_config} -l ${printer_logfile}"
 command_user="klipper:klipper"
 pidfile="/run/klipper.pid"
 extra_commands="checkconfig"
+description_checkconfig="Validates service configuration file."
 
 checkconfig() {
     if [ -z "$printer_config" ]; then

@@ -11,6 +11,7 @@ S="${WORKDIR}/${PN}"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=" ~amd64 arm ~arm64"
+IUSE="doc"
 RESTRICT="test strip"
 
 src_unpack() {
@@ -24,8 +25,10 @@ src_unpack() {
 src_prepare() {
 	default
 
-	rm -r "${S}"/config
-	rm -r "${S}"/klippy
+	if ! use doc; then
+		rm -r "${S}"/config
+		rm -r "${S}"/docs
+	fi
 }
 
 src_configure() {

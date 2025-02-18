@@ -43,3 +43,8 @@ src_install() {
 	insinto /usr/src/
 	doins -r "${S}"
 }
+
+pkg_postinst() {
+	elog "To compile firmware install ARM toolchain: 'crossdev -S --target arm-none-eabi'"
+	elog "You may also need to recompile 'newlib' with 'nano' flag afterwards"
+}

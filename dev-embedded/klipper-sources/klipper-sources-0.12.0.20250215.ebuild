@@ -40,6 +40,7 @@ src_compile() {
 }
 
 src_install() {
+	fperms 0755 scripts/check-gcc.sh
 	insinto /usr/src/
 	doins -r "${S}"
 }

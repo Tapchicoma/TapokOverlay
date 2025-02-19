@@ -42,8 +42,8 @@ src_unpack() {
 	rm -r "${WORKDIR}"/moonraker-62051108ea16d5db5fa382651e01a51d89c041c9 || die
 }
 
-src_install() {
-	default
+python_install() {
+	distutils-r1_python_install
 
 	newinitd "${FILESDIR}"/moonraker.initd moonraker
 	newconfd "${FILESDIR}"/moonraker.confd moonraker

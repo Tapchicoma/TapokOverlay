@@ -1,0 +1,57 @@
+#!/sbin/openrc-run
+
+description="API Web Server for Klipper"
+command="/usr/bin/moonraker"
+command_background=true
+command_args="-c ${moonraker_config} -l ${moonraker_logfile}"
+command_user="klipper:klipper"
+pidfile="/run/moonraker.pid"
+extra_commands="checkconfig"
+description_checkconfig="Validates service configuration file."
+
+checkconfig() {
+    if [ -z "$moonraker_config" ]; then
+        eerror "You must to setup 'moonraker_config' in /etc/conf.d/mooraker first!"
+        exit 1
+    fi;
+
+    if [ -z "$moonraker_logfile" ]; then
+        eerror "You must setup 'mooraker_logfile' in /etc/conf.d/moonraker first!"
+        exit 1
+    fi;
+
+    checkpath -f "$moonraker_config"
+}
+
+start_pre() {
+  # If this isn't a restart, make sure that the user's config isn't
+  # busted before we try to start the daemon (this will produce
+  # better error messages than if we just try to start it blindly).
+  #
+  # If, on the other hand, this *is* a restart, then the stop_pre
+  # action will have ensured that the config is usable and we don't
+  # need to do that again.
+  if [ "${RC_CMD}" != "restart" ] ; then
+    checkconfig || return $?
+
+    logdir="$(dirname "$moonraker_logfile")"
+    if [ ! -d "$logdir" ]; then
+        mkdir "${logdir}" || eerror "Could not create logs directory ${logdir}"
+        chown klipper:klipper "$logdir"
+    fi
+  fi
+}
+
+stop_pre() {
+  # If this is a restart, check to make sure the user's config
+  # isn't busted before we stop the running daemon.
+  if [ "${RC_CMD}" = "restart" ] ; then
+      checkconfig || return $?
+  fi
+}
+
+depend() {
+    need localmount
+    after udev klipper
+    use logger
+}

@@ -1,0 +1,11 @@
+# Moonraker Configuration File
+
+[server]
+host: 0.0.0.0
+port: 7125
+# Make sure the klippy_uds_address is correct.  It is initialized
+# to the default address.
+klippy_uds_address: /tmp/klippy_uds
+
+[machine]
+provider: none

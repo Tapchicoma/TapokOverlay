@@ -18,6 +18,12 @@ SLOT="0"
 KEYWORDS="amd64 arm arm64"
 RESTRICT="test"
 
+RDEPEND="
+	dev-python/wrapt[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEPS}]
+	dev-python/zstandard[${PYTHON_USEDEPS}]
+"
+DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "

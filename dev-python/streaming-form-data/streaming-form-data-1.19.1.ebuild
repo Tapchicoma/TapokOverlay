@@ -21,9 +21,7 @@ IUSE="doc"
 RESTRICT="test"
 
 RDEPEND="
-	dev-python/cython[${PYTHON_USEDEP}]
-	dev-python/mypy[${PYTHON_USEDEP}]
-	dev-python/requests-toolbelt[${PYTHON_USEDEP}]
+	dev-python/smart-open[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

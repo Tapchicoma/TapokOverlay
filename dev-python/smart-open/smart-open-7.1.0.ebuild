@@ -20,8 +20,8 @@ RESTRICT="test"
 
 RDEPEND="
 	dev-python/wrapt[${PYTHON_USEDEP}]
-	dev-python/requests[${PYTHON_USEDEPS}]
-	dev-python/zstandard[${PYTHON_USEDEPS}]
+	dev-python/requests[${PYTHON_USEDEP}]
+	dev-python/zstandard[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

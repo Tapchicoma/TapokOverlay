@@ -57,4 +57,7 @@ python_install() {
 	insinto /etc/moonraker
 	newins "${FILESDIR}/default_config" moonraker.conf
 	fowners klipper:klipper /etc/moonraker/moonraker.conf
+
+	dodir /var/lib/moonraker
+	fowners klipper:klipper /var/lib/moonraker
 }

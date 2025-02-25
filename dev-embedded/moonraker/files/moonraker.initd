@@ -3,7 +3,7 @@
 description="API Web Server for Klipper"
 command="/usr/bin/moonraker"
 command_background=true
-command_args="-c ${moonraker_config} -l ${moonraker_logfile}"
+command_args="-c ${moonraker_config} -l ${moonraker_logfile} -d /var/lib/moonraker/"
 command_user="klipper:klipper"
 pidfile="/run/moonraker.pid"
 extra_commands="checkconfig"

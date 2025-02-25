@@ -31,6 +31,7 @@ RDEPEND="
 	dev-python/importlib-metadata[${PYTHON_USEDEP}]
 	dev-python/streaming-form-data[${PYTHON_USEDEP}]
 	dev-python/dbus-fast[${PYTHON_USEDEP}]
+	dev-python/inotify-simple[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

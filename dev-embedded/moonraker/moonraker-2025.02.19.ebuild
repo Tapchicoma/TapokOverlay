@@ -19,6 +19,7 @@ SLOT="0"
 KEYWORDS="arm arm64"
 RESTRICT="test"
 
+# dev-python/dbus-fast is missing arm64 keyword
 RDEPEND="
 	dev-embedded/klipper:=
 	dev-python/pyserial[${PYTHON_USEDEP}]
@@ -29,6 +30,7 @@ RDEPEND="
 	dev-python/jinja2[${PYTHON_USEDEP}]
 	dev-python/importlib-metadata[${PYTHON_USEDEP}]
 	dev-python/streaming-form-data[${PYTHON_USEDEP}]
+	dev-python/dbus-fast[${PYTHON_USEDEP}]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

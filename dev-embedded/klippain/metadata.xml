@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>egorr.berd@gmail.com</email>
+    <name>Yahor Berdnikau</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="github">Frix-x/klippain</remote-id>
+  </upstream>
+  <use>
+    <flag name="moonraker">
+      Add moonraker configuration
+    </flag>
+  </use>
+</pkgmetadata>

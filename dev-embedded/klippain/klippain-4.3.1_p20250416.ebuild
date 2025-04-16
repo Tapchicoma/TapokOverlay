@@ -1,5 +1,11 @@
 # Copyright 2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+#
+# Missing parts:
+# - gcode_shell_command as klipper extension
+# - system_info command
+# - shaketune
+# - adapt moonraker scripts
 
 EAPI=8
 

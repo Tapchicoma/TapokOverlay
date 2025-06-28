@@ -1,0 +1,219 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 01c874dcfd..98be1091d4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -384,7 +384,7 @@ endif()
+ # boost::process was introduced first in version 1.64.0,
+ # boost::beast::detail::base64 was introduced first in version 1.66.0
+ set(MINIMUM_BOOST_VERSION "1.66.0")
+-set(_boost_components "system;filesystem;thread;log;locale;regex;chrono;atomic;date_time;iostreams")
++set(_boost_components "system;filesystem;thread;log;locale;regex;chrono;atomic;date_time;iostreams;process")
+ find_package(Boost ${MINIMUM_BOOST_VERSION} REQUIRED COMPONENTS ${_boost_components})
+ # boost compile only in release & debug. We have to force the release version for RELWITHDEBINFO compilation
+ if (MSVC)
+diff --git a/src/libslic3r/GCode/PostProcessor.cpp b/src/libslic3r/GCode/PostProcessor.cpp
+index 8e0304ae95..5f32d84691 100644
+--- a/src/libslic3r/GCode/PostProcessor.cpp
++++ b/src/libslic3r/GCode/PostProcessor.cpp
+@@ -16,7 +16,8 @@
+ #include <boost/nowide/cenv.hpp>
+ #include <boost/nowide/fstream.hpp>
+ 
+-#include <cstdlib>   // getenv()
++#include <cstdlib> // getenv()
++#include <boost/asio/read.hpp>
+ #ifdef WIN32
+ // The standard Windows includes.
+ #define WIN32_LEAN_AND_MEAN
+@@ -228,19 +229,16 @@ static int run_script(const std::string &script, const std::string &gcode, std::
+     command_line.push_back('\'');
+ 
+     BOOST_LOG_TRIVIAL(trace) << boost::format("Executing script, shell: %1%, command: %2%") % shell % command_line;
+-    process::ipstream istd_err;
+-    process::child child(shell, "-c", command_line, process::std_err > istd_err);
++    boost::asio::io_context ctx;
++    boost::asio::readable_pipe rp_err{ctx};
++    process::process process(ctx, shell, {"-c", command_line}, process::process_stdio{{}, {}, rp_err});
+ 
+     std_err.clear();
+-    std::string line;
++    boost::system::error_code ec;
++    boost::asio::read(rp_err, boost::asio::dynamic_buffer(std_err), ec);
+ 
+-    while (child.running() && std::getline(istd_err, line)) {
+-        std_err.append(line);
+-        std_err.push_back('\n');
+-    }
+-
+-    child.wait();
+-    return child.exit_code();
++    process.wait();
++    return process.exit_code();
+ }
+ 
+ #endif
+diff --git a/src/slic3r/GUI/FreeCADDialog.cpp b/src/slic3r/GUI/FreeCADDialog.cpp
+index 9b7213b557..d1b5a5722a 100644
+--- a/src/slic3r/GUI/FreeCADDialog.cpp
++++ b/src/slic3r/GUI/FreeCADDialog.cpp
+@@ -63,11 +63,11 @@ namespace GUI {
+     //now that we have process.hpp, we can define the ExecVar
+     class ExecVar {
+     public:
+-        boost::process::opstream pyin;
+         boost::asio::io_context ios;
+-        std::future<std::string> data_out;
+-        std::future<std::string> data_err;
+-        std::unique_ptr<boost::process::child> process;
++        boost::asio::writable_pipe pyin{ios};
++        boost::asio::readable_pipe data_out{ios};
++        boost::asio::readable_pipe data_err{ios};
++        std::unique_ptr<boost::process::process> process;
+ };
+ 
+     //TODO: auto tab
+@@ -843,17 +843,30 @@ bool FreeCADDialog::init_start_python() {
+         get_string_from_web_async("https://api.github.com/repos/supermerill/FreePySCAD/commits/master", this, &FreeCADDialog::test_update_script_file);
+     }
+ 
+-    exec_var->process.reset(new boost::process::child(pythonpath.string() + " -u -i", boost::process::std_in < exec_var->pyin,
+-        boost::process::std_out > exec_var->data_out, boost::process::std_err > exec_var->data_err, exec_var->ios));
+-    exec_var->pyin << "import sys" << std::endl;
++    exec_var->process.reset(
++        new boost::process::process(exec_var->ios,
++        pythonpath.string(),
++        { "-u","-i" },
++        boost::process::process_stdio {
++            exec_var->pyin,
++            exec_var->data_out,
++            exec_var->data_err,
++        }
++        )
++    );
++
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("import sys\n"));
+     // add freecad lib path if not already done
+-    exec_var->pyin << "sys.path.append('" << (freecadpath / "lib").string() << "')" << std::endl;
+-    exec_var->pyin << "import FreeCAD" << std::endl;
+-    exec_var->pyin << "import Part" << std::endl;
+-    exec_var->pyin << "import Draft" << std::endl;
+-    exec_var->pyin << "sys.path.append('" << scripts_path.generic_string() << "')" << std::endl;
+-    exec_var->pyin << "from FreePySCAD.freepyscad import *" << std::endl;
+-    exec_var->pyin << "App.newDocument(\"document\")" << std::endl;
++
++    boost::asio::write(exec_var->pyin,
++                       boost::asio::buffer("sys.path.append('" + (freecadpath / "lib").string() + "')\n"));
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("import FreeCAD\n"));
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("import Part\n"));
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("import Draft\n"));
++    boost::asio::write(exec_var->pyin,
++                       boost::asio::buffer("sys.path.append('" + scripts_path.generic_string() + "')\n"));
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("from FreePySCAD.freepyscad import *\n"));
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("App.newDocument(\"document\")\n"));
+ #ifdef __WINDOWS__
+     exec_var->pyin << "set_font_dir(\"C:/Windows/Fonts/\")" << std::endl;
+ #endif
+@@ -861,7 +874,7 @@ bool FreeCADDialog::init_start_python() {
+     exec_var->pyin << "set_font_dir([\"/System/Library/Fonts/\", \"~/Library/Fonts/\"])" << std::endl;
+ #endif
+ #ifdef __linux__
+-    exec_var->pyin << "set_font_dir([\"/usr/share/fonts/\",\"~/.fonts/\"])" << std::endl;
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("set_font_dir([\"/usr/share/fonts/\",\"~/.fonts/\"])\n"));
+     // also add 
+ #endif
+ 
+@@ -869,7 +882,7 @@ bool FreeCADDialog::init_start_python() {
+ }
+ 
+ bool FreeCADDialog::end_python() {
+-    exec_var->pyin << "quit()" << std::endl;
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("quit()\n"));
+     exec_var->process->wait();
+     exec_var->ios.run();
+     return true;
+@@ -958,17 +971,21 @@ void FreeCADDialog::create_geometry(wxCommandEvent& event_args) {
+ 
+ 
+     //exec_var->pyin << "scene().redraw("<< boost::replace_all_copy(boost::replace_all_copy(m_text->GetText(), "\r", ""), "\n", "") <<")" << std::endl;
+-    exec_var->pyin << ("exec(open('" + temp_file.generic_string() + "').read())\n");
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("exec(open('" + temp_file.generic_string() + "').read())\n"));
+     //filter to avoid importing "intermediate" object like ones from importStl
+-    exec_var->pyin << "Mesh.export(list(filter(lambda x: isinstance(x, Part.Feature),App.ActiveDocument.RootObjects)), u\"" << object_path.generic_string() << "\")" << std::endl;
+-    exec_var->pyin << "print('exported!')" << std::endl;
+-    exec_var->pyin << "App.ActiveDocument.RootObjects" << std::endl;
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("Mesh.export(list(filter(lambda x: isinstance(x, Part.Feature),App.ActiveDocument.RootObjects)), u\"" + object_path.generic_string() + "\")\n"));
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("print('exported!')\n"));
++    boost::asio::write(exec_var->pyin, boost::asio::buffer("App.ActiveDocument.RootObjects\n"));
+ 
+     end_python();
+ 
+     std::string pyout_str_hello;
+-    BOOST_LOG_TRIVIAL(trace) << "==cout==\n" << exec_var->data_out.get()<<"\n";
+-    std::string errStr = exec_var->data_err.get();
++    std::string data_out;
++    boost::system::error_code ec;
++    boost::asio::read(exec_var->data_out, boost::asio::dynamic_buffer(data_out), ec);
++    BOOST_LOG_TRIVIAL(trace) << "==cout==\n" << data_out <<"\n";
++    std::string errStr;
++    boost::asio::read(exec_var->data_err, boost::asio::dynamic_buffer(errStr), ec);
+     BOOST_LOG_TRIVIAL(trace) << "==cerr==\n" << errStr <<"\n";
+     std::string cleaned = boost::replace_all_copy(boost::replace_all_copy(errStr, ">>> ", ""),"\r","");
+     boost::replace_all(cleaned, "QWaitCondition: Destroyed while threads are still waiting\n", "");
+diff --git a/src/slic3r/GUI/RemovableDriveManager.cpp b/src/slic3r/GUI/RemovableDriveManager.cpp
+index dfbd7c9faa..0468f782b9 100644
+--- a/src/slic3r/GUI/RemovableDriveManager.cpp
++++ b/src/slic3r/GUI/RemovableDriveManager.cpp
+@@ -8,6 +8,7 @@
+ 
+ #include <boost/nowide/convert.hpp>
+ #include <boost/log/trivial.hpp>
++#include <boost/asio/read.hpp>
+ 
+ #if _WIN32
+ #include <windows.h>
+@@ -859,31 +860,31 @@ void RemovableDriveManager::eject_drive()
+ 		// but neither triggers "succesful safe removal messege"
+ 		
+ 		BOOST_LOG_TRIVIAL(info) << "Ejecting started";
+-		boost::process::ipstream istd_err;
+-    	boost::process::child child(
+-#if __APPLE__		
+-			boost::process::search_path("diskutil"), "eject", correct_path.c_str(), (boost::process::std_out & boost::process::std_err) > istd_err);
++	    boost::asio::io_context ctx;
++        boost::asio::readable_pipe rp_err{ctx};
++	    boost::system::error_code ec;
++        boost::process::process process(ctx,
++#if __APPLE__
++        boost::process::environment::find_executable("diskutil"), { "eject", correct_path.c_str() }, boost::process::process_stdio{{}, rp_err, rp_err});
+ 		//Another option how to eject at mac. Currently not working.
+ 		//used insted of system() command;
+ 		//this->eject_device(correct_path);
+ #else
+-    		boost::process::search_path("umount"), correct_path.c_str(), (boost::process::std_out & boost::process::std_err) > istd_err);
++    		boost::process::environment::find_executable("umount"), { correct_path.c_str() }, boost::process::process_stdio{{}, rp_err, rp_err});
+ #endif
+-		std::string line;
+-		while (child.running() && std::getline(istd_err, line)) {
+-			BOOST_LOG_TRIVIAL(trace) << line;
+-		}
+-		// wait for command to finnish (blocks ui thread)
+-		std::error_code ec;
+-		child.wait(ec);
++        std::string output;
++        boost::asio::read(rp_err, boost::asio::dynamic_buffer(output), ec);
++        // wait for command to finnish (blocks ui thread)
++		process.wait(ec);
++	    BOOST_LOG_TRIVIAL(trace) << output;
+ 		bool success = false;
+ 		if (ec) {
+             // The wait call can fail, as it did in https://github.com/prusa3d/PrusaSlicer/issues/5507
+             // It can happen even in cases where the eject is sucessful, but better report it as failed.
+             // We did not find a way to reliably retrieve the exit code of the process.
+-			BOOST_LOG_TRIVIAL(error) << "boost::process::child::wait() failed during Ejection. State of Ejection is unknown. Error code: " << ec.value();
++			BOOST_LOG_TRIVIAL(error) << "boost::process::wait() failed during Ejection. State of Ejection is unknown. Error code: " << ec.value();
+ 		} else {
+-			int err = child.exit_code();
++			int err = process.exit_code();
+ 	    	if (err) {
+ 	    		BOOST_LOG_TRIVIAL(error) << "Ejecting failed. Exit code: " << err;
+ 	    	} else {

@@ -64,6 +64,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-fix-cutsurface.patch"
 	"${FILESDIR}/${PN}-${PV}-fix-boost-process.patch"
 	"${FILESDIR}/${PN}-${PV}-link-occtwrapper-statically.patch"
+	"${FILESDIR}/${PN}-${PV}-fix-seamplacer.patch"
 )
 
 src_unpack() {

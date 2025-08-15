@@ -1,0 +1,20 @@
+diff --git a/src/libslic3r/GCode/SeamPlacer.hpp b/src/libslic3r/GCode/SeamPlacer.hpp
+index 4840f4c35b..5fc6feb45c 100644
+--- a/src/libslic3r/GCode/SeamPlacer.hpp
++++ b/src/libslic3r/GCode/SeamPlacer.hpp
+@@ -5,6 +5,7 @@
+ #ifndef libslic3r_SeamPlacer_hpp_
+ #define libslic3r_SeamPlacer_hpp_
+ 
++
+ #include <optional>
+ #include <vector>
+ #include <memory>
+@@ -17,6 +18,7 @@
+ #include "libslic3r/BoundingBox.hpp"
+ #include "libslic3r/AABBTreeIndirect.hpp"
+ #include "libslic3r/KDTreeIndirect.hpp"
++#include "libslic3r/TriangleMesh.hpp"
+ 
+ namespace Slic3r {
+ 

@@ -33,6 +33,8 @@ RDEPEND="${PYTHON_DEPS}
 "
 BDEPEND="${PYTHON_DEPS}"
 
+DOCS_COMPRESS="no"
+
 src_unpack() {
 	default
 
@@ -57,7 +59,9 @@ src_compile() {
 }
 
 src_install() {
+	use doc && docompress -x /usr/share/doc/${PF}/docs
 	use doc && dodoc -r "${S}"/docs
+	use doc && docompress -x /usr/share/doc/${PF}/config
 	use doc && dodoc -r "${S}"/config
 
 	insinto /usr/libexec/klipper/
@@ -65,6 +69,8 @@ src_install() {
 	fperms 0755 /usr/libexec/klipper/klippy/klippy.py
 	fperms 0755 /usr/libexec/klipper/klippy/console.py
 	fperms 0755 /usr/libexec/klipper/klippy/parsedump.py
+	use doc && dosym /usr/share/doc/${PF}/docs /usr/libexec/klipper/docs
+	use doc && dosym /usr/share/doc/${PF}/config /usr/libexec/klipper/config
 	fowners klipper:klipper /usr/libexec/klipper/
 
 	newinitd "${FILESDIR}"/klipper.initd klipper

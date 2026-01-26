@@ -12,5 +12,8 @@
     <flag name="inputshaper">
       Add required dependencies for Klipper inputshaper plugin
     </flag>
+    <flag name="can">
+      Enable support for CanBus type of communication with MCU
+    </flag>
   </use>
 </pkgmetadata>

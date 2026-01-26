@@ -17,7 +17,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="arm arm64"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-IUSE="doc"
+IUSE="doc inputshaper"
 
 RDEPEND="${PYTHON_DEPS}
 	dev-python/pyserial[${PYTHON_USEDEP}]
@@ -27,6 +27,8 @@ RDEPEND="${PYTHON_DEPS}
 	dev-python/markupsafe[${PYTHON_USEDEP}]
 	acct-group/klipper
 	acct-user/klipper
+	inputshaper? ( dev-python/numpy[${PYTHON_USEDEP}] )
+	inputshaper? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 "
 BDEPEND="${PYTHON_DEPS}"
 

@@ -8,4 +8,9 @@
   <upstream>
     <remote-id type="github">Klipper3d/klipper</remote-id>
   </upstream>
+    <use>
+    <flag name="inputshaper">
+      Add required dependencies for Klipper inputshaper plugin
+    </flag>
+  </use>
 </pkgmetadata>

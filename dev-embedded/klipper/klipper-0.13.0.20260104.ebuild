@@ -103,7 +103,7 @@ src_install() {
 		doins README.md
 		doins -r scripts/
 		doins -r src/
-		dosym ../../libexec/klipper usr/src/klipper-sources/klippy
+		dosym ../../libexec/klipper/klippy usr/src/klipper-sources/klippy
 		use doc && dosym ../../share/doc/${PF}/docs usr/src/klipper-sources/docs
 		use doc && dosym ../../share/doc/${PF}/config usr/src/klipper-sources/config
 		fowners klipper:klipper usr/src/klipper-sources

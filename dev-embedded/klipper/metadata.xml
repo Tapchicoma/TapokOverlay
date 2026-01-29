@@ -15,5 +15,8 @@
     <flag name="can">
       Enable support for CanBus type of communication with MCU
     </flag>
+    <flag name="source">
+      Install Klipper sources to compile custom firmware
+    </flag>
   </use>
 </pkgmetadata>

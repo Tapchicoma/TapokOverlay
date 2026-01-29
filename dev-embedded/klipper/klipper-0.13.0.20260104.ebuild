@@ -15,9 +15,10 @@ S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="arm arm64"
+KEYWORDS="~amd64 arm arm64"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-IUSE="can doc inputshaper"
+IUSE="can doc inputshaper source"
+RESTRICT="test strip"
 
 RDEPEND="${PYTHON_DEPS}
 	dev-python/pyserial[${PYTHON_USEDEP}]
@@ -30,10 +31,9 @@ RDEPEND="${PYTHON_DEPS}
 	inputshaper? ( dev-python/numpy[${PYTHON_USEDEP}] )
 	inputshaper? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	can? ( dev-python/python-can[${PYTHON_USEDEP}] )
+	!!dev-embedded/klipper-sources
 "
 BDEPEND="${PYTHON_DEPS}"
-
-DOCS_COMPRESS="no"
 
 src_unpack() {
 	default
@@ -51,6 +51,7 @@ src_prepare() {
 	default
 
 	python_foreach_impl python_fix_shebang --force klippy/
+	python_foreach_impl python_fix_shebang --force scripts/
 }
 
 src_compile() {
@@ -59,26 +60,46 @@ src_compile() {
 }
 
 src_install() {
-	use doc && docompress -x /usr/share/doc/${PF}/docs
+	use doc && docompress -x usr/share/doc/${PF}/docs
 	use doc && dodoc -r "${S}"/docs
-	use doc && docompress -x /usr/share/doc/${PF}/config
+	use doc && docompress -x usr/share/doc/${PF}/config
 	use doc && dodoc -r "${S}"/config
 
-	insinto /usr/libexec/klipper/
+	insinto usr/libexec/klipper/
 	doins -r klippy/
-	fperms 0755 /usr/libexec/klipper/klippy/klippy.py
-	fperms 0755 /usr/libexec/klipper/klippy/console.py
-	fperms 0755 /usr/libexec/klipper/klippy/parsedump.py
-	use doc && dosym /usr/share/doc/${PF}/docs /usr/libexec/klipper/docs
-	use doc && dosym /usr/share/doc/${PF}/config /usr/libexec/klipper/config
-	fowners klipper:klipper /usr/libexec/klipper/
+	fperms 0755 usr/libexec/klipper/klippy/klippy.py
+	fperms 0755 usr/libexec/klipper/klippy/console.py
+	fperms 0755 usr/libexec/klipper/klippy/parsedump.py
+	use doc && dosym ../../share/doc/${PF}/docs usr/libexec/klipper/docs
+	use doc && dosym ../../share/doc/${PF}/config usr/libexec/klipper/config
+	fowners klipper:klipper usr/libexec/klipper/
 
 	newinitd "${FILESDIR}"/klipper.initd klipper
 	newconfd "${FILESDIR}"/klipper.confd klipper
 
-	dodir /etc/klipper
-	fowners klipper:klipper /etc/klipper
-	insinto /etc/klipper
+	dodir etc/klipper
+	fowners klipper:klipper etc/klipper
+	insinto etc/klipper
 	newins config/example.cfg printer.cfg
-	fowners klipper:klipper /etc/klipper/printer.cfg
+	fowners klipper:klipper etc/klipper/printer.cfg
+
+	if use source; then
+		insinto usr/src/klipper-sources/
+		doins COPYING
+		doins -r lib/
+		doins Makefile
+		doins README.md
+		doins -r scripts/
+		doins -r src/
+		dosym ../../libexec/klipper usr/src/klipper-sources/klippy
+		use doc && dosym ../../share/doc/${PF}/docs usr/src/klipper-sources/docs
+		use doc && dosym ../../share/doc/${PF}/config usr/src/klipper-sources/config
+		fowners klipper:klipper usr/src/klipper-sources
+		fperms 0755 usr/src/klipper-sources/scripts/check-gcc.sh
+	fi
+}
+
+pkg_postinst() {
+	use source && elog "To compile firmware install ARM toolchain: 'crossdev -S --target arm-none-eabi'"
+	use source && elog "You may also need to recompile 'newlib' with 'nano' flag afterwards"
 }

@@ -18,5 +18,8 @@
     <flag name="source">
       Install Klipper sources to compile custom firmware
     </flag>
+    <flag name="eddy-ng">
+      Add eddy-ng plugin for Eddy current probes support
+    </flag>
   </use>
 </pkgmetadata>

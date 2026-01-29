@@ -8,16 +8,19 @@ PYTHON_COMPAT=( python3_{11..14} )
 inherit python-r1
 
 COMMIT_HASH="e60fe3d99b545d7e42ff2f5278efa5822668a57c"
+EDDY_NG_COMMIT_HASH="c7ca62edb2f479a1533e2790863a6667d1fd4a48"
+
 DESCRIPTION="The Klipper service to control 3d-Printers."
 HOMEPAGE="https://www.klipper3d.org/"
-SRC_URI="https://github.com/Klipper3d/klipper/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/Klipper3d/klipper/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz
+	eddy-ng? ( https://github.com/vvuk/eddy-ng/archive/${EDDY_NG_COMMIT_HASH}.tar.gz -> eddy-ng.tar.gz )"
 S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 arm arm64"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-IUSE="can doc inputshaper source"
+IUSE="can doc eddy-ng inputshaper source"
 RESTRICT="test strip"
 
 RDEPEND="${PYTHON_DEPS}
@@ -41,6 +44,15 @@ src_unpack() {
 	mkdir "${S}"
 	mv "${WORKDIR}"/klipper-${COMMIT_HASH}/* "${S}"/ || die
 	rm -r "${WORKDIR}"/klipper-${COMMIT_HASH} || die
+
+	if use eddy-ng; then
+		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/eddy-ng/sensor_ldc1612_ng.c" "${S}/src/"
+		sed -i 's,sensor_ldc1612.c$,sensor_ldc1612.c sensor_ldc1612_ng.c,' "${S}/src/Makefile" || die
+
+		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/probe_eddy_ng.py" "${S}/klippy/extras/"
+		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/probe_eddy_ng.py" "${S}/klippy/extras/"
+		sed -i 's,probe_name.startswith(\"probe_eddy_current\"),\"eddy\" in probe_name #eddy-ng,' "${S}/klippy/extras/bed_mesh.py"
+	fi
 }
 
 pkg_setup() {

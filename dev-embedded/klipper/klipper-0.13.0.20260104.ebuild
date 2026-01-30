@@ -50,7 +50,7 @@ src_unpack() {
 		sed -i 's,sensor_ldc1612.c$,sensor_ldc1612.c sensor_ldc1612_ng.c,' "${S}/src/Makefile" || die
 
 		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/probe_eddy_ng.py" "${S}/klippy/extras/"
-		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/probe_eddy_ng.py" "${S}/klippy/extras/"
+		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/ldc1612_ng.py" "${S}/klippy/extras/"
 		sed -i 's,probe_name.startswith(\"probe_eddy_current\"),\"eddy\" in probe_name #eddy-ng,' "${S}/klippy/extras/bed_mesh.py"
 	fi
 }

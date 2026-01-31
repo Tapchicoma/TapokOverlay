@@ -132,7 +132,7 @@ src_install() {
 pkg_postinst() {
 	if use source; then
 		elog "To compile firmware:"
-		elog "    - Run 'echo "cross-arm-none-eabi/newlib nano" >> /etc/portage/package.use/newlib'"
+		elog "    - Run 'echo 'cross-arm-none-eabi/newlib nano' >> /etc/portage/package.use/newlib'"
 		elog "    - Install ARM toolchain: 'crossdev -s3 -S --target arm-none-eabi'"
 		elog "(Stage 3 of toolchain is enough to compile Klipper)"
 	fi

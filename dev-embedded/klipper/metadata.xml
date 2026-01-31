@@ -19,7 +19,10 @@
       Install Klipper sources to compile custom firmware
     </flag>
     <flag name="eddy-ng">
-      Add eddy-ng plugin for Eddy current probes support
+      Add eddy-ng plugin for Eddy current probes support (https://github.com/vvuk/eddy-ng)
+    </flag>
+    <flag name="tmc-autotune">
+      Install TMC-autotune Klipper plugin (https://github.com/andrewmcgr/klipper_tmc_autotune)
     </flag>
   </use>
 </pkgmetadata>

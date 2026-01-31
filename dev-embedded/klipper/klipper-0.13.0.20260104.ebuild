@@ -49,11 +49,9 @@ src_unpack() {
 
 	if use eddy-ng; then
 		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/eddy-ng/sensor_ldc1612_ng.c" "${S}/src/"
-		sed -i 's,sensor_ldc1612.c$,sensor_ldc1612.c sensor_ldc1612_ng.c,' "${S}/src/Makefile" || die
 
 		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/probe_eddy_ng.py" "${S}/klippy/extras/"
 		cp "${WORKDIR}/eddy-ng-${EDDY_NG_COMMIT_HASH}/ldc1612_ng.py" "${S}/klippy/extras/"
-		sed -i 's,probe_name.startswith(\"probe_eddy_current\"),\"eddy\" in probe_name #eddy-ng,' "${S}/klippy/extras/bed_mesh.py"
 	fi
 }
 
@@ -63,6 +61,16 @@ pkg_setup() {
 
 src_prepare() {
 	default
+
+	if use source; then
+		elog "Fixing Makefile's to use crossdev toolchain"
+		find "${S}/src/" -type f -name 'Makefile' -exec sed -i 's/-lc_nano/-lc_nano -lnosys/g' {} + || die
+	fi
+
+	if use eddy-ng; then
+		sed -i 's,sensor_ldc1612.c$,sensor_ldc1612.c sensor_ldc1612_ng.c,' "${S}/src/Makefile" || die
+		sed -i 's,probe_name.startswith(\"probe_eddy_current\"),\"eddy\" in probe_name #eddy-ng,' "${S}/klippy/extras/bed_mesh.py" || die
+	fi
 
 	python_foreach_impl python_fix_shebang --force klippy/
 	python_foreach_impl python_fix_shebang --force scripts/
@@ -114,6 +122,10 @@ src_install() {
 }
 
 pkg_postinst() {
-	use source && elog "To compile firmware install ARM toolchain: 'crossdev -S --target arm-none-eabi'"
-	use source && elog "You may also need to recompile 'newlib' with 'nano' flag afterwards"
+	if use source; then
+		elog "To compile firmware:"
+		elog "    - Run 'echo "cross-arm-none-eabi/newlib nano" >> /etc/portage/package.use/newlib'"
+		elog "    - Install ARM toolchain: 'crossdev -s3 -S --target arm-none-eabi'"
+		elog "(Stage 3 of toolchain is enough to compile Klipper)"
+	fi
 }

@@ -31,10 +31,12 @@ RDEPEND="${PYTHON_DEPS}
 	dev-python/markupsafe[${PYTHON_USEDEP}]
 	acct-group/klipper
 	acct-user/klipper
+	!!dev-embedded/klipper-sources
 	inputshaper? ( dev-python/numpy[${PYTHON_USEDEP}] )
 	inputshaper? ( dev-python/matplotlib[${PYTHON_USEDEP}] )
 	can? ( dev-python/python-can[${PYTHON_USEDEP}] )
-	!!dev-embedded/klipper-sources
+	eddy-ng? ( dev-python/scipy[${PYTHON_USEDEP}] )
+	eddy-ng? ( dev-python/plotly[${PYTHON_USEDEP}] )
 "
 BDEPEND="${PYTHON_DEPS}"
 

@@ -1,0 +1,8 @@
+/var/log/klipper/klippy.log.* {
+    su klipper klipper
+    rotate 2
+    daily
+    missingok
+    nocreate
+    compress
+}

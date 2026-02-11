@@ -22,7 +22,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 arm arm64"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
-IUSE="can doc eddy-ng inputshaper source tmc-autotune"
+IUSE="can doc eddy-ng inputshaper source tmc-autotune logrotate"
 RESTRICT="test strip"
 
 RDEPEND="${PYTHON_DEPS}
@@ -39,6 +39,7 @@ RDEPEND="${PYTHON_DEPS}
 	can? ( dev-python/python-can[${PYTHON_USEDEP}] )
 	eddy-ng? ( dev-python/scipy[${PYTHON_USEDEP}] )
 	eddy-ng? ( dev-python/plotly[${PYTHON_USEDEP}] )
+	logrotate? ( app-admin/logrotate )
 "
 BDEPEND="${PYTHON_DEPS}"
 
@@ -126,6 +127,11 @@ src_install() {
 		use doc && dosym ../../share/doc/${PF}/config usr/src/klipper-sources/config
 		fowners klipper:klipper usr/src/klipper-sources
 		fperms 0755 usr/src/klipper-sources/scripts/check-gcc.sh
+	fi
+
+	if use logrotate; then
+		insinto etc/logrotate.d/
+		newins "${FILESDIR}/klipper.logrotate" klipper
 	fi
 }
 

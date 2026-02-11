@@ -24,5 +24,8 @@
     <flag name="tmc-autotune">
       Install TMC-autotune Klipper plugin (https://github.com/andrewmcgr/klipper_tmc_autotune)
     </flag>
+    <flag name="logrotate">
+      use app-admin/logrotate for rotating logs
+    </flag>
   </use>
 </pkgmetadata>

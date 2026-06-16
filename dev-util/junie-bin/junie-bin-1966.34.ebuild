@@ -22,6 +22,7 @@ src_install() {
 	insinto /usr/share/junie
 	doins -r junie-app/lib
 	doins -r junie-app/bin
+	doexe /usr/share/junie/bin/junie
 
 	dobin "${FILESDIR}"/junie
 }

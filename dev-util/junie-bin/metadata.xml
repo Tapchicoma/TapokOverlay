@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>me@yahor.xyz</email>
+    <name>Yahor Berdnikau</name>
+  </maintainer>
+  <upstream>
+    <bugs-to>https://github.com/JetBrains/junie/issues</bugs-to>
+    <remote-id type="github">JetBrains/junie</remote-id>
+  </upstream>
+</pkgmetadata>

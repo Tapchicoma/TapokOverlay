@@ -1,0 +1,3 @@
+#!/bin/bash
+SCRIPT_DIR="/usr/share/junie"
+exec "$SCRIPT_DIR/bin/junie" "$@"

@@ -7,7 +7,7 @@ inherit unpacker systemd xdg desktop
 
 DESCRIPTION="Cloudflare Warp Client"
 HOMEPAGE="https://1.1.1.1"
-SRC_URI="https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/${PN}_${PV}_amd64.deb"
+SRC_URI="https://pkg.cloudflareclient.com/pool/resolute/main/c/cloudflare-warp/${PN}_${PV}_amd64.deb"
 S="${WORKDIR}"
 
 LICENSE="all-rights-reserved"

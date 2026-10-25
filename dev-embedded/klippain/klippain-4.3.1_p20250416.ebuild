@@ -1,4 +1,4 @@
-# Copyright 2025 Gentoo Authors
+# Copyright 2025-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 #
 # Missing parts:
@@ -13,7 +13,7 @@ PYTHON_COMPAT=( python3_{11..13} )
 
 inherit python-r1
 
-DESCRIPTION="Klippain is a customizable Klipper configuration for 3D printers."
+DESCRIPTION="Klippain is a customizable Klipper configuration for 3D printers"
 HOMEPAGE="https://github.com/Frix-x/klippain"
 SRC_URI="https://github.com/Frix-x/klippain/archive/ce8626ce81b0c7dbddee9b3861d518c28ed5682f.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${PV}"

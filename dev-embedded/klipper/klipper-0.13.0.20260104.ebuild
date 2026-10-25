@@ -11,7 +11,7 @@ COMMIT_HASH="e60fe3d99b545d7e42ff2f5278efa5822668a57c"
 EDDY_NG_COMMIT_HASH="c7ca62edb2f479a1533e2790863a6667d1fd4a48"
 TMC_AUTOTUNE_COMMIT_HASH="f582d5f42b66df9ee1f087f2f1519ac241bbd5b1"
 
-DESCRIPTION="The Klipper service to control 3d-Printers."
+DESCRIPTION="The Klipper service to control 3d-Printers"
 HOMEPAGE="https://www.klipper3d.org/"
 SRC_URI="https://github.com/Klipper3d/klipper/archive/${COMMIT_HASH}.tar.gz -> ${P}.tar.gz
 	eddy-ng? ( https://github.com/vvuk/eddy-ng/archive/${EDDY_NG_COMMIT_HASH}.tar.gz -> eddy-ng.tar.gz )
